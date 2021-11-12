@@ -8,5 +8,6 @@ def main():
     state = test_scene.TestScene()
     game.run(state)
 
+# 开始程序
 if __name__ == '__main__':
     main()
