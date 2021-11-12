@@ -29,7 +29,7 @@ class TestScene:
         pygame.display.update()
         self.draw(surface)
 
-    # 玩家的状态
+    # 场景的修改
     def state(self, state):
         self.state = state
 
