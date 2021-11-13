@@ -22,7 +22,7 @@ class Game:
             stage.update(self.screen, keys)
             self.clock.tick(60)
 
-
+# 读取图片
 def load_graphics(path):
     graphics = {}
     for pic in os.listdir(path):

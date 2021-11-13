@@ -18,4 +18,3 @@ TRUN_ACCEL = 0.8
 # 跑步加速度
 RUN_ACCEL = 0.3
 
-GROUND_LEVEL = 600

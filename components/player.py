@@ -158,9 +158,7 @@ class Player(pygame.sprite.Sprite):
     # 下落
     def fall(self, keys):
         self.y_vel = self.calcu_vel(self.y_vel, CONS.GRAVITY, -CONS.MAX_Y_SPEED)
-        if self.rect.bottom >= CONS.GROUND_LEVEL:
-            self.y_vel = 0
-            self.state = 'walk'
+
     # 判断是否可以跳跃
     def judge_jump(self, keys):
         if not keys[pygame.K_SPACE]:
