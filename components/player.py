@@ -42,6 +42,7 @@ class Player(pygame.sprite.Sprite):
         self.run_accel = CONS.RUN_ACCEL
         self.max_x_vel = self.max_walk_vel
         self.x_accel = self.walk_accel
+        self.can_jump = True
 
 
     # 帧造型，方便表示出运动的变化
@@ -70,12 +71,15 @@ class Player(pygame.sprite.Sprite):
 
     # 处理各种状态
     def handle_states(self, keys):
+        self.judge_jump(keys)
         if self.state == 'stand':
             self.stand(keys)
         elif self.state == 'walk':
             self.walk(keys)
         elif self.state == 'jump':
             self.jump(keys)
+        elif self.state == 'fall':
+            self.fall(keys)
         # 面向的图片
         if self.face_right:
             self.image = self.right_frames[self.frame_index]
@@ -84,9 +88,7 @@ class Player(pygame.sprite.Sprite):
 
     # 站立
     def stand(self, keys):
-        self.frame_index = 0
-        self.x_vel = 0
-        self.y_vel = 0
+        self.frame_index = 1
         # 方向右键
         if keys[pygame.K_RIGHT]:
             self.face_right = True
@@ -95,6 +97,11 @@ class Player(pygame.sprite.Sprite):
         elif keys[pygame.K_LEFT]:
             self.face_right = False
             self.state = 'walk'
+        # 空格跳跃
+        elif keys[pygame.K_SPACE] and self.can_jump:
+            self.y_vel = CONS.MAX_Y_SPEED
+            self.state = 'jump'
+
     # 行走
     def walk(self, keys):
         # 定义最大速度和加速度
@@ -107,6 +114,11 @@ class Player(pygame.sprite.Sprite):
             else:
                 self.frame_index = 0
             self.walking_timer = self.current_time
+
+        if keys[pygame.K_SPACE] and self.can_jump:
+            self.y_vel = CONS.MAX_Y_SPEED
+            self.state = 'jump'
+
         # 向左移动
         if keys[pygame.K_RIGHT]:
             self.face_right = True
@@ -135,6 +147,26 @@ class Player(pygame.sprite.Sprite):
                 if self.x_vel > 0:
                     self.x_vel = 0
                     self.state = 'stand'
+
+    # 跳跃
+    def jump(self, keys):
+        self.frame_index = 0
+        self.can_jump = False
+        self.y_vel += CONS.ANTI_GRAVITY
+        if self.y_vel >= 0:
+            self.state = 'fall'
+    # 下落
+    def fall(self, keys):
+        self.y_vel = self.calcu_vel(self.y_vel, CONS.GRAVITY, -CONS.MAX_Y_SPEED)
+        if self.rect.bottom >= CONS.GROUND_LEVEL:
+            self.y_vel = 0
+            self.state = 'walk'
+    # 判断是否可以跳跃
+    def judge_jump(self, keys):
+        if not keys[pygame.K_SPACE]:
+            self.can_jump = True
+
+
     # 计算速度，运动的
     def calcu_vel(self, vel, accel, max_vel, is_positive=True):
         if is_positive:
@@ -142,5 +174,4 @@ class Player(pygame.sprite.Sprite):
         else:
             return max(vel - accel, -max_vel)
 
-    def jump(self, keys):
-        pass
+

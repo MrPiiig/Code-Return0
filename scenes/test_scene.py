@@ -1,6 +1,7 @@
 import pygame
 import setup
 from components import player
+import constants as CONS
 
 class TestScene:
     def __init__(self):
@@ -17,7 +18,7 @@ class TestScene:
         self.player = player.Player()
         # 初始化玩家位置
         self.player.rect.x = 300
-        self.player.rect.y = 300
+        self.player.rect.y = 500
 
     def setup_cursor(self):
         pass
