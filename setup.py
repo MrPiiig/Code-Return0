@@ -7,4 +7,5 @@ pygame.display.set_mode(screen_size)
 
 # 导入所有素材
 player_graphics = util.load_graphics('./assets/textures/player')
+enemy_graphics = util.load_graphics('./assets/textures/enemy')
 scene_graphics = util.load_graphics('./assets/textures/scene')

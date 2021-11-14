@@ -5,12 +5,10 @@ import setup
 import pygame
 # 导入常量数据
 import constants as CONS
+import util
 
 # 定义玩家类
 class Player(pygame.sprite.Sprite):
-    # 刹车站立帧
-    frame_index = 0
-
     # 类方法， method
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -25,6 +23,8 @@ class Player(pygame.sprite.Sprite):
         self.state = 'stand'
         # 脸朝向为右
         self.face_right = True
+        # 初始帧
+        self.frame_index = 1
 
     # 各种计时器，以后buff时间，道具使用倒计时
     def setup_timers(self):
@@ -127,13 +127,13 @@ class Player(pygame.sprite.Sprite):
                 self.frame_index = 0
                 self.x_accel = self.turn_accel
             # 计算速度
-            self.x_vel = self.calcu_vel(self.x_vel, self.x_accel, self.max_x_vel, True)
+            self.x_vel = util.calcu_vel(self.x_vel, self.x_accel, self.max_x_vel, True)
         elif keys[pygame.K_LEFT]:
             self.face_right = False
             if self.x_vel > 0:
                 self.frame_index = 0
                 self.x_accel = self.turn_accel
-            self.x_vel = self.calcu_vel(self.x_vel, self.x_accel, self.max_x_vel, False)
+            self.x_vel = util.calcu_vel(self.x_vel, self.x_accel, self.max_x_vel, False)
 
         # 什么按键都不按，则切换到站立状态
         else:
@@ -157,7 +157,7 @@ class Player(pygame.sprite.Sprite):
             self.state = 'fall'
     # 下落
     def fall(self, keys):
-        self.y_vel = self.calcu_vel(self.y_vel, CONS.GRAVITY, -CONS.MAX_Y_SPEED)
+        self.y_vel = util.calcu_vel(self.y_vel, CONS.GRAVITY, -CONS.MAX_Y_SPEED)
 
     # 判断是否可以跳跃
     def judge_jump(self, keys):
@@ -165,11 +165,5 @@ class Player(pygame.sprite.Sprite):
             self.can_jump = True
 
 
-    # 计算速度，运动的
-    def calcu_vel(self, vel, accel, max_vel, is_positive=True):
-        if is_positive:
-            return min(vel + accel, max_vel)
-        else:
-            return max(vel - accel, -max_vel)
 
 
