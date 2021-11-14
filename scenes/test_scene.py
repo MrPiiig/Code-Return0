@@ -29,18 +29,19 @@ class TestScene:
     def setup_cursor(self):
         pass
 
+    # 设置物品、地形
     def setup_stuff(self):
         self.ground_items_group = pygame.sprite.Group()
         for item in map.ground:
             self.ground_items_group.add(stuff.Item(item['x'], item['y'], item['width'], item['height']))
 
-
+    # 设置敌人
     def setup_enemies(self):
         self.enemy_group = pygame.sprite.Group()
         for member in map.enemy:
             self.enemy_group.add(enemy.create_enemy(member))
 
-    # 更新并且在画布上画出玩家位置的变换
+    # 更新函数，所有需要实时更新的内容
     def update(self, surface, keys):
         self.update_player_position()
         self.player.update(keys)
@@ -52,7 +53,7 @@ class TestScene:
 
 
 
-    # 玩家位置变换信息
+    # 更新玩家位置
     def update_player_position(self):
         self.player.rect.x += self.player.x_vel
         if self.player.rect.x < self.start_x:
@@ -66,6 +67,7 @@ class TestScene:
         # y变化后检测y方向上碰撞
         self.check_y_collisions(self.player)
 
+    # 更新敌人位置
     def update_enemy_position(self, enemy):
         enemy.rect.x += enemy.x_vel
         self.check_x_collisions(enemy)
@@ -94,6 +96,7 @@ class TestScene:
             being.rect.left = item.rect.right
 
         being.x_vel = 0
+
     # 检测到碰撞后重设y位置
     def adjust_y(self, being, item):
         if being.rect.bottom < item.rect.bottom:
