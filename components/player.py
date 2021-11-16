@@ -122,13 +122,11 @@ class Player(pygame.sprite.Sprite):
             self.state = 'jump'
         # 按z键攻击
         elif keys[pygame.K_z]:
-                while self.attacking_time != 0:
-                    self.attack(pygame.K_z)
-                    self.state = 'attack'
-                    self.attacking_time -=1
-                self.attacking_time = 1000
-                self.is_attacking = False
-                self.state = 'walk'
+            self.state = 'attack'
+            self.attacking_time = self.current_time
+
+
+
 
 
     # 行走
@@ -196,6 +194,6 @@ class Player(pygame.sprite.Sprite):
 
     # 攻击
     def attack(self, keys):
-        print('pressz')
         self.is_attacking = True
-        self.state = 'attack'
+        if self.current_time - self.attacking_time > 100:
+            self.state = 'walk'

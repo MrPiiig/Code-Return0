@@ -58,7 +58,6 @@ class TestScene:
 
     # 更新玩家位置
     def update_player_state(self):
-        # print(self.player.is_attacking)
         if self.player.is_attacking:
             if self.player.face_right == True:
                 self.check_player_enemy_collisions(self.player.right_attack)
@@ -109,10 +108,10 @@ class TestScene:
     # 检测玩家和敌人的碰撞
     def check_player_enemy_collisions(self, being):
         attacked_enemy = pygame.sprite.spritecollide(being, self.enemy_group, False)
-        if len(attacked_enemy) > 0:
-            for member in attacked_enemy:
-                member.x_vel = 10
-
+        if self.player.is_attacking:
+            if len(attacked_enemy) > 0:
+                for member in attacked_enemy:
+                    member.x_vel = 10
         self.player.is_attacking = False
 
 
