@@ -151,5 +151,4 @@ class TestScene:
         surface.blit(self.player.left_attack.image, self.player.left_attack.rect)
         surface.blit(self.player.right_attack.image, self.player.right_attack.rect)
         for member in self.enemy_group:
-            # print(member.image, member.rect)
             surface.blit(member.image, member.rect)
