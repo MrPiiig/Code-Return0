@@ -2,7 +2,13 @@ import pygame
 import setup
 from components import player, stuff, enemy
 import constants as CONS
-from maps import  map_testscene as map
+from maps import map_testscene as map
+
+
+def create_enemy(enemy_data):
+    enemy = Monster(enemy_data['x'], enemy_data['y'], enemy_data['width'], enemy_data['height'])
+    return enemy
+
 
 class TestScene:
     def __init__(self):
@@ -13,7 +19,6 @@ class TestScene:
         self.setup_enemies()
         self.setup_cursor()
         self.setup_stuff()
-
 
     # 插入背景
     def setup_background(self):
@@ -43,7 +48,7 @@ class TestScene:
 
     # 更新函数，所有需要实时更新的内容
     def update(self, surface, keys):
-        self.update_player_position()
+        self.update_player_state()
         self.player.update(keys)
         for member in self.enemy_group:
             self.update_enemy_position(member)
@@ -51,21 +56,33 @@ class TestScene:
         pygame.display.update()
         self.draw(surface)
 
-
-
     # 更新玩家位置
-    def update_player_position(self):
+    def update_player_state(self):
+        # print(self.player.is_attacking)
+        if self.player.is_attacking:
+            if self.player.face_right == True:
+                self.check_player_enemy_collisions(self.player.right_attack)
+            elif self.player.face_right == False:
+                self.check_player_enemy_collisions(self.player.left_attack)
         self.player.rect.x += self.player.x_vel
+
+        self.player.right_attack.rect.x = self.player.rect.right
+        self.player.left_attack.rect.x = self.player.rect.left - self.player.rect.width
         if self.player.rect.x < self.start_x:
             self.player.rect.x = self.start_x
         if self.player.rect.x > self.end_x:
             self.player.rect.x = self.end_x
+
         # x变化后检测x方向上碰撞
         self.check_x_collisions(self.player)
 
         self.player.rect.y += self.player.y_vel
+        self.player.right_attack.rect.y = self.player.rect.top
+        self.player.left_attack.rect.y = self.player.rect.top
         # y变化后检测y方向上碰撞
         self.check_y_collisions(self.player)
+
+
 
     # 更新敌人位置
     def update_enemy_position(self, enemy):
@@ -80,6 +97,7 @@ class TestScene:
         ground_item = pygame.sprite.spritecollideany(being, self.ground_items_group)
         if ground_item:
             self.adjust_x(being, ground_item)
+
     # 检测y轴碰撞
     def check_y_collisions(self, being):
         ground_item = pygame.sprite.spritecollideany(being, self.ground_items_group)
@@ -87,6 +105,16 @@ class TestScene:
             self.adjust_y(being, ground_item)
         # 检测脚底是否为空
         self.check_falling(being)
+
+    # 检测玩家和敌人的碰撞
+    def check_player_enemy_collisions(self, being):
+        attacked_enemy = pygame.sprite.spritecollide(being, self.enemy_group, False)
+        if len(attacked_enemy) > 0:
+            for member in attacked_enemy:
+                member.x_vel = 10
+
+        self.player.is_attacking = False
+
 
     # 检测到碰撞后重设x位置
     def adjust_x(self, being, item):
@@ -108,6 +136,7 @@ class TestScene:
             being.rect.top = item.rect.bottom
             being.state = 'fall'
             being.y_vel = 7
+
     # 检测脚底是否有碰撞，没有就下落
     def check_falling(self, being):
         being.rect.y += 1
@@ -120,8 +149,8 @@ class TestScene:
     def draw(self, surface):
         surface.blit(self.background, (0, 0))
         surface.blit(self.player.image, self.player.rect)
+        surface.blit(self.player.left_attack.image, self.player.left_attack.rect)
+        surface.blit(self.player.right_attack.image, self.player.right_attack.rect)
         for member in self.enemy_group:
             # print(member.image, member.rect)
             surface.blit(member.image, member.rect)
-
-

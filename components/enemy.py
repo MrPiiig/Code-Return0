@@ -28,7 +28,7 @@ class Enemy(pygame.sprite.Sprite):
 
         self.frame_index = 1
 
-        self.state = 'walk'
+        self.state = 'stand'
 
         self.face_right = True
 
@@ -54,7 +54,7 @@ class Enemy(pygame.sprite.Sprite):
 
     # 行走
     def walk(self):
-        self.x_vel = 1
+        self.x_vel = 0
         if self.current_time - self.walking_timer > 100:
             self.frame_index += 1
             self.frame_index %= 3

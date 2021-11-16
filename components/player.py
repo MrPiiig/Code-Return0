@@ -7,6 +7,16 @@ import pygame
 import constants as CONS
 import util
 
+
+class Attack(pygame.sprite.Sprite):
+    def __init__(self, x, y, w, h):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = setup.player_graphics['attack_check']
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+
 # 定义玩家类
 class Player(pygame.sprite.Sprite):
     # 类方法， method
@@ -16,6 +26,11 @@ class Player(pygame.sprite.Sprite):
         self.setup_timers()
         self.setup_velocities()
         self.load_images()
+        self.setup_attack()
+
+    def setup_attack(self):
+        self.right_attack = Attack(self.rect.right, self.rect.top, 20, 30)
+        self.left_attack = Attack(self.rect.left, self.rect.top, 20, 30)
 
     # 主角状态
     def setup_state(self):
@@ -25,10 +40,13 @@ class Player(pygame.sprite.Sprite):
         self.face_right = True
         # 初始帧
         self.frame_index = 1
+        # 攻击判定
+        self.is_attacking = False
 
     # 各种计时器，以后buff时间，道具使用倒计时
     def setup_timers(self):
         self.walking_timer = 0
+        self.attacking_time = 1000
 
     # 速度数值
     def setup_velocities(self):
@@ -43,7 +61,6 @@ class Player(pygame.sprite.Sprite):
         self.max_x_vel = self.max_walk_vel
         self.x_accel = self.walk_accel
         self.can_jump = True
-
 
     # 帧造型，方便表示出运动的变化
     def load_images(self):
@@ -80,6 +97,8 @@ class Player(pygame.sprite.Sprite):
             self.jump(keys)
         elif self.state == 'fall':
             self.fall(keys)
+        elif self.state == 'attack':
+            self.attack(keys)
         # 面向的图片
         if self.face_right:
             self.image = self.right_frames[self.frame_index]
@@ -101,6 +120,16 @@ class Player(pygame.sprite.Sprite):
         elif keys[pygame.K_SPACE] and self.can_jump:
             self.y_vel = CONS.MAX_Y_SPEED
             self.state = 'jump'
+        # 按z键攻击
+        elif keys[pygame.K_z]:
+                while self.attacking_time != 0:
+                    self.attack(pygame.K_z)
+                    self.state = 'attack'
+                    self.attacking_time -=1
+                self.attacking_time = 1000
+                self.is_attacking = False
+                self.state = 'walk'
+
 
     # 行走
     def walk(self, keys):
@@ -155,6 +184,7 @@ class Player(pygame.sprite.Sprite):
         self.y_vel += CONS.ANTI_GRAVITY
         if self.y_vel >= 0:
             self.state = 'fall'
+
     # 下落
     def fall(self, keys):
         self.y_vel = util.calcu_vel(self.y_vel, CONS.GRAVITY, -CONS.MAX_Y_SPEED)
@@ -164,6 +194,8 @@ class Player(pygame.sprite.Sprite):
         if not keys[pygame.K_SPACE]:
             self.can_jump = True
 
-
-
-
+    # 攻击
+    def attack(self, keys):
+        print('pressz')
+        self.is_attacking = True
+        self.state = 'attack'
