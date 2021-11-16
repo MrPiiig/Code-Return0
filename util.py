@@ -22,7 +22,7 @@ class Game:
             stage.update(self.screen, keys)
             self.clock.tick(60)
 
-
+# 读取图片
 def load_graphics(path):
     graphics = {}
     for pic in os.listdir(path):
@@ -33,5 +33,11 @@ def load_graphics(path):
 
     return graphics
 
+# 计算加速度函数
+def calcu_vel(vel, accel, max_vel, is_positive=True):
+    if is_positive:
+        return min(vel + accel, max_vel)
+    else:
+        return max(vel - accel, -max_vel)
 
 
