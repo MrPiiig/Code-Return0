@@ -1,5 +1,7 @@
+
 SCRENN_WIDTH = 1280
 SCRENN_HEIGHT = 720
+
 
 # 下落重力加速度
 GRAVITY = 1.4
@@ -17,4 +19,7 @@ WALK_ACCEL = 0.5
 TRUN_ACCEL = 0.8
 # 跑步加速度
 RUN_ACCEL = 0.3
+
+#屏幕缩放尺寸
+BG_RATE = 1
 
