@@ -20,6 +20,5 @@ TRUN_ACCEL = 0.8
 # 跑步加速度
 RUN_ACCEL = 0.3
 
-#屏幕缩放尺寸
-BG_RATE = 1
-
+#主界面button缩放尺寸
+MAIN_BUTTON_RATE = 0.7
