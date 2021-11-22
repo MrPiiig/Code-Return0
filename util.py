@@ -4,22 +4,37 @@ import random
 import os
 
 class Game:
-    def __init__(self):
+    def __init__(self, state_dict, start_state):
         self.screen = pygame.display.get_surface()
         self.clock = pygame.time.Clock()
+        # 按键
+        self.keys = pygame.key.get_pressed()
+        self.state_dict = state_dict
+        self.state = self.state_dict[start_state]
 
-    def run(self, stage):
+    def update(self):
+        if self.state.finished:
+            next_state = self.state.next
+            self.state.finished = False
+            self.state = self.state_dict[next_state]
+        self.state.update(self.screen, self.keys)
+
+
+    def run(self):
         while True:
-            keys = pygame.key.get_pressed()
+            # keys = pygame.key.get_pressed()
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
-                    keys = pygame.key.get_pressed()
+                    self.keys = pygame.key.get_pressed()
                 if event.type == pygame.KEYUP:
-                    keys = pygame.key.get_pressed()
+                    self.keys = pygame.key.get_pressed()
                 if event.type == pygame.QUIT:
-                    sys.exit()
+                    # sys.exit()
+                    pygame.display.quit()
 
-            stage.update(self.screen, keys)
+            self.update()
+
+            pygame.display.update()
             self.clock.tick(60)
 
 # 读取图片

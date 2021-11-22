@@ -4,6 +4,7 @@ from components import player, stuff, enemy
 import constants as CONS
 from maps import map_testscene as map
 
+from components import info
 
 def create_enemy(enemy_data):
     enemy = Monster(enemy_data['x'], enemy_data['y'], enemy_data['width'], enemy_data['height'])
@@ -19,6 +20,7 @@ class TestScene:
         self.setup_enemies()
         self.setup_cursor()
         self.setup_stuff()
+        self.finished = False
 
     # 插入背景
     def setup_background(self):
@@ -55,6 +57,7 @@ class TestScene:
             member.update()
         pygame.display.update()
         self.draw(surface)
+
 
     # 更新玩家位置
     def update_player_state(self):
@@ -152,3 +155,13 @@ class TestScene:
         surface.blit(self.player.right_attack.image, self.player.right_attack.rect)
         for member in self.enemy_group:
             surface.blit(member.image, member.rect)
+
+# class Level:
+#     def __init__(self):
+#         self.finished = False
+#         self.next = None
+#         self.info = info.Info('level')
+#         self.setup_background()
+#
+#     def setup_background(self):
+#         self.background = setup.Gra
