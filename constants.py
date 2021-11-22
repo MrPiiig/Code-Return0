@@ -1,7 +1,5 @@
-
 SCRENN_WIDTH = 1280
 SCRENN_HEIGHT = 720
-
 
 # 下落重力加速度
 GRAVITY = 1.4
@@ -20,5 +18,7 @@ TRUN_ACCEL = 0.8
 # 跑步加速度
 RUN_ACCEL = 0.3
 
-#主界面button缩放尺寸
+# 主界面button缩放尺寸
 MAIN_BUTTON_RATE = 0.7
+# 背景缩放
+BG_MULIT = 1.6

@@ -22,14 +22,12 @@ class Game:
 
     def run(self):
         while True:
-            # keys = pygame.key.get_pressed()
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     self.keys = pygame.key.get_pressed()
                 if event.type == pygame.KEYUP:
                     self.keys = pygame.key.get_pressed()
                 if event.type == pygame.QUIT:
-                    # sys.exit()
                     pygame.display.quit()
 
             self.update()

@@ -3,8 +3,8 @@ import setup
 from components import player, stuff, enemy
 import constants as CONS
 from maps import map_testscene as map
-
 from components import info
+
 
 def create_enemy(enemy_data):
     enemy = Monster(enemy_data['x'], enemy_data['y'], enemy_data['width'], enemy_data['height'])
@@ -24,7 +24,16 @@ class TestScene:
 
     # 插入背景
     def setup_background(self):
-        self.background = setup.scene_graphics['bg']
+        self.background = setup.scene_graphics['Background_1.1']
+        rect = self.background.get_rect()
+        # 将背景设置和游戏界面等高等宽
+        self.background = pygame.transform.scale(self.background, (int(rect.width * CONS.BG_MULIT),
+                                                                   int(rect.height * CONS.BG_MULIT)))
+        self.background_rect = self.background.get_rect()
+        # 滑动游戏窗口
+        self.game_window = setup.SCREEN.get_rect()
+        # 空白图层
+        self.game_ground = pygame.Surface((self.background_rect.width, self.background_rect.height))
 
     # 设置玩家
     def setup_player(self):
@@ -52,12 +61,19 @@ class TestScene:
     def update(self, surface, keys):
         self.update_player_state()
         self.player.update(keys)
+        # 更新跟随窗口
+        self.update_game_window()
+
         for member in self.enemy_group:
             self.update_enemy_position(member)
             member.update()
         pygame.display.update()
         self.draw(surface)
 
+    def update_game_window(self):
+        forth = self.game_window.x + self.game_window.width / 4
+        if self.player.x_vel > 0 and self.player.rect.centerx > forth:
+            self.game_window.x += self.player.x_vel
 
     # 更新玩家位置
     def update_player_state(self):
@@ -83,8 +99,6 @@ class TestScene:
         self.player.left_attack.rect.y = self.player.rect.top
         # y变化后检测y方向上碰撞
         self.check_y_collisions(self.player)
-
-
 
     # 更新敌人位置
     def update_enemy_position(self, enemy):
@@ -117,7 +131,6 @@ class TestScene:
                     member.x_vel = 10
         self.player.is_attacking = False
 
-
     # 检测到碰撞后重设x位置
     def adjust_x(self, being, item):
         if being.rect.x < item.rect.x:
@@ -149,19 +162,13 @@ class TestScene:
 
     # 画布画图
     def draw(self, surface):
-        surface.blit(self.background, (0, 0))
+        # 玩家跟随窗口移动
+        self.game_ground.blit(self.background, self.game_window, self.game_window)
+        # 人物移动更新画布
+        surface.blit(self.background, (0, 0), self.game_window)
         surface.blit(self.player.image, self.player.rect)
+        # 左右攻击区域判定跟随人物移动
         surface.blit(self.player.left_attack.image, self.player.left_attack.rect)
         surface.blit(self.player.right_attack.image, self.player.right_attack.rect)
         for member in self.enemy_group:
             surface.blit(member.image, member.rect)
-
-# class Level:
-#     def __init__(self):
-#         self.finished = False
-#         self.next = None
-#         self.info = info.Info('level')
-#         self.setup_background()
-#
-#     def setup_background(self):
-#         self.background = setup.Gra
