@@ -22,3 +22,6 @@ RUN_ACCEL = 0.3
 MAIN_BUTTON_RATE = 0.7
 # 背景缩放
 BG_MULIT = 1.6
+
+#Font
+FONT='./assets/font/PangMenZhengDaoCuShuTi.ttf'

@@ -3,6 +3,7 @@ import pygame
 import setup
 import constants as CONS
 from components import info
+import util
 
 
 class Mainscene:
@@ -86,10 +87,17 @@ class Mainscene:
                 self.finished = True
 
 
+
+
+
     # 更新画布
     def update(self, surface, keys):
         self.update_arrow(keys)
         self.draw(surface)
+
+        #测试字体用
+        #surface.blit(util.creat_info('HELLLLLLLLLLLO',size=60),(800,600))
+
         pygame.display.update()
 
         self.info.update()

@@ -2,6 +2,8 @@ import sys
 import pygame
 import random
 import os
+import constants as CONS
+
 
 class Game:
     def __init__(self, state_dict, start_state):
@@ -54,3 +56,11 @@ def calcu_vel(vel, accel, max_vel, is_positive=True):
         return max(vel - accel, -max_vel)
 
 
+
+#文字生成
+def creat_info(label,size=40,width_size=1,heigtt_size=1):
+    font=pygame.font.Font(CONS.FONT,size)
+    #将文字生成为图片,（层级，是否抗锯齿，颜色rgb)
+    font_image=font.render(label,1,(0,0,0))
+
+    return font_image
