@@ -125,10 +125,6 @@ class Player(pygame.sprite.Sprite):
             self.state = 'attack'
             self.attacking_time = self.current_time
 
-
-
-
-
     # 行走
     def walk(self, keys):
         # 定义最大速度和加速度
