@@ -2,13 +2,10 @@ import pygame
 import setup
 from components import player, stuff, enemy
 import constants as CONS
+from components.enemy import Enemy
 from maps import map_testscene as map
 from components import info
 
-
-def create_enemy(enemy_data):
-    enemy = Monster(enemy_data['x'], enemy_data['y'], enemy_data['width'], enemy_data['height'])
-    return enemy
 
 
 class TestScene:
@@ -55,7 +52,7 @@ class TestScene:
     def setup_enemies(self):
         self.enemy_group = pygame.sprite.Group()
         for member in map.enemy:
-            self.enemy_group.add(enemy.create_enemy(member))
+            self.enemy_group.add(enemy.create_enemy(member, self.player))
 
     # 更新函数，所有需要实时更新的内容
     def update(self, surface, keys):
@@ -113,6 +110,9 @@ class TestScene:
         ground_item = pygame.sprite.spritecollideany(being, self.ground_items_group)
         if ground_item:
             self.adjust_x(being, ground_item)
+        enemy = pygame.sprite.spritecollideany(self.player, self.enemy_group)
+        if enemy:
+            enemy.follow_player()
 
     # 检测y轴碰撞
     def check_y_collisions(self, being):
