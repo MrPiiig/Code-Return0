@@ -8,7 +8,7 @@ from components import info
 
 
 
-class TestScene:
+class GameScene:
     def __init__(self):
         self.start_x = 0
         self.end_x = 1200
@@ -37,7 +37,7 @@ class TestScene:
         self.player = player.Player()
         # 初始化玩家位置
         self.player.rect.x = 300
-        self.player.rect.y = 400
+        self.player.rect.y = 200
 
     def setup_cursor(self):
         pass
@@ -105,6 +105,7 @@ class TestScene:
         enemy.rect.y += enemy.y_vel
         self.check_y_collisions(enemy)
 
+
     # 检测x轴碰撞
     def check_x_collisions(self, being):
         ground_item = pygame.sprite.spritecollideany(being, self.ground_items_group)
@@ -168,7 +169,7 @@ class TestScene:
         surface.blit(self.background, (0, 0), self.game_window)
         surface.blit(self.player.image, self.player.rect)
         # 左右攻击区域判定跟随人物移动
-        surface.blit(self.player.left_attack.image, self.player.left_attack.rect)
-        surface.blit(self.player.right_attack.image, self.player.right_attack.rect)
+        # surface.blit(self.player.left_attack.image, self.player.left_attack.rect)
+        # surface.blit(self.player.right_attack.image, self.player.right_attack.rect)
         for member in self.enemy_group:
             surface.blit(member.image, member.rect)

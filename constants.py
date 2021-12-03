@@ -1,11 +1,13 @@
 SCRENN_WIDTH = 1280
 SCRENN_HEIGHT = 720
 
+# 地板高度
+GROUND_HEIGHT = 680
 
 # 下落重力加速度
-GRAVITY = 1.4
+GRAVITY = 0.9
 # 上升重力加速度
-ANTI_GRAVITY = 0.8
+ANTI_GRAVITY = 0.4
 # 最大行走速度（不能超过这个数值）
 MAX_WALK_SPEED = 6
 # 最大跑步速度
@@ -24,10 +26,7 @@ ENEMY_SPEED = 1
 TRUN_ACCEL = 1
 # 背景放大倍数
 BG_MULTI = 1.5
-# 敌人左巡逻位置
-POSITION_LEFT = 463
-# 敌人右巡逻位置
-POSITION_RIGHT = 700
+
 
 # 主界面button缩放尺寸
 MAIN_BUTTON_RATE = 0.7

@@ -11,10 +11,8 @@ import util
 class Attack(pygame.sprite.Sprite):
     def __init__(self, x, y, w, h):
         pygame.sprite.Sprite.__init__(self)
-        self.image = setup.player_graphics['attack_check']
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
+        self.image = pygame.Surface((50, 50))
+        self.rect = pygame.Rect(x, y, w, h)
 
 
 # 定义玩家类
@@ -46,6 +44,7 @@ class Player(pygame.sprite.Sprite):
     # 各种计时器，以后buff时间，道具使用倒计时
     def setup_timers(self):
         self.walking_timer = 0
+        self.jumping_timer = 0
         self.attacking_time = 1000
 
     # 速度数值
@@ -64,18 +63,38 @@ class Player(pygame.sprite.Sprite):
 
     # 帧造型，方便表示出运动的变化
     def load_images(self):
-        running_frames = ['heroLeft1', 'heroLeft2', 'heroLeft3']
+        running_frames = ['Move_1', 'Move_2', 'Move_3', 'Move_4', 'Move_5']
+        jumping_frames = ['Jump_1', 'Jump_2', 'Jump_3']
+
+        left_stand_image = setup.player_graphics['Stand_1']
+        left_stand_image = pygame.transform.scale(left_stand_image, (left_stand_image.get_width() * 0.4, left_stand_image.get_height() * 0.4))
+        right_stand_image = pygame.transform.flip(left_stand_image, True, False)
         self.right_frames = []
         self.left_frames = []
+        self.right_frames.append(right_stand_image)
+        self.left_frames.append(left_stand_image)
         for running_frame in running_frames:
             # 向左移动
             left_image = setup.player_graphics[running_frame]
+            left_image = pygame.transform.scale(left_image, (left_image.get_width() * 0.4, left_image.get_height() * 0.4))
             # 翻转并向右移动
             right_image = pygame.transform.flip(left_image, True, False)
             # 向右叠加图片
             self.right_frames.append(right_image)
             # 向左叠加
             self.left_frames.append(left_image)
+
+        for jumping_frame in jumping_frames:
+            # 向左跳跃
+            left_image = setup.player_graphics[jumping_frame]
+            left_image = pygame.transform.scale(left_image,
+                                                (left_image.get_width() * 0.4, left_image.get_height() * 0.4))
+            # 向右跳跃
+            right_image = pygame.transform.flip(left_image, True, False)
+            # 添加图片
+            self.right_frames.append(right_image)
+            self.left_frames.append(left_image)
+
 
         self.frames = self.right_frames
         self.image = self.frames[self.frame_index]
@@ -107,7 +126,7 @@ class Player(pygame.sprite.Sprite):
 
     # 站立
     def stand(self, keys):
-        self.frame_index = 1
+        self.frame_index = 0
         # 方向右键
         if keys[pygame.K_RIGHT]:
             self.face_right = True
@@ -120,6 +139,9 @@ class Player(pygame.sprite.Sprite):
         elif keys[pygame.K_SPACE] and self.can_jump:
             self.y_vel = CONS.MAX_Y_SPEED
             self.state = 'jump'
+            self.jumping_timer = self.current_time
+
+
         # 按z键攻击
         elif keys[pygame.K_z]:
             self.state = 'attack'
@@ -136,29 +158,30 @@ class Player(pygame.sprite.Sprite):
         self.x_accel = self.walk_accel
         # 如果相应时间大于100毫秒，换帧
         if self.current_time - self.walking_timer > 100:
-            if self.frame_index < 2:
+            if self.frame_index < 5:
                 self.frame_index += 1
             else:
-                self.frame_index = 0
+                self.frame_index = 1
             self.walking_timer = self.current_time
 
         if keys[pygame.K_SPACE] and self.can_jump:
             self.y_vel = CONS.MAX_Y_SPEED
             self.state = 'jump'
+            self.jumping_timer = self.current_time
 
         # 向左移动
         if keys[pygame.K_RIGHT]:
             self.face_right = True
             # 如果速度小于0，刹车站立帧
             if self.x_vel < 0:
-                self.frame_index = 0
+                self.frame_index = 1
                 self.x_accel = self.turn_accel
             # 计算速度
             self.x_vel = util.calcu_vel(self.x_vel, self.x_accel, self.max_x_vel, True)
         elif keys[pygame.K_LEFT]:
             self.face_right = False
             if self.x_vel > 0:
-                self.frame_index = 0
+                self.frame_index = 1
                 self.x_accel = self.turn_accel
             self.x_vel = util.calcu_vel(self.x_vel, self.x_accel, self.max_x_vel, False)
 
@@ -177,7 +200,9 @@ class Player(pygame.sprite.Sprite):
 
     # 跳跃
     def jump(self, keys):
-        self.frame_index = 0
+        self.frame_index = 6
+        if self.current_time - self.jumping_timer > 100:
+            self.frame_index += 1
         self.can_jump = False
         self.y_vel += CONS.ANTI_GRAVITY
         if self.y_vel >= 0:
@@ -185,6 +210,7 @@ class Player(pygame.sprite.Sprite):
 
     # 下落
     def fall(self, keys):
+        self.frame_index = 8
         self.y_vel = util.calcu_vel(self.y_vel, CONS.GRAVITY, -CONS.MAX_Y_SPEED)
 
     # 判断是否可以跳跃

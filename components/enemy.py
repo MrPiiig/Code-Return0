@@ -3,7 +3,7 @@ import setup
 import util
 import constants as CONS
 from components import player
-from scenes import test_scene
+from scenes import game_scene
 
 
 # 生成敌人实例
@@ -14,6 +14,8 @@ def create_enemy(enemy_data, player):
 
 # 敌人基类
 class Enemy(pygame.sprite.Sprite):
+    walk_left = 0
+    walk_right = 0
     def __init__(self, x, y, w, h, player):
         pygame.sprite.Sprite.__init__(self)
         self.frame_index = 0
@@ -29,8 +31,8 @@ class Enemy(pygame.sprite.Sprite):
         self.current_time = pygame.time.get_ticks()
         self.player = player
         self.handle_states()
-        self.update_position()
-        self.update()
+        self.walk_left = x - 200
+        self.walk_right = x + 200
 
     def load_images(self):
         running_frames = ["heroLeft1", "heroLeft2", "heroLeft3"]
@@ -48,7 +50,7 @@ class Enemy(pygame.sprite.Sprite):
     def update(self):
         self.current_time = pygame.time.get_ticks()
         self.handle_states()
-        self.update_position()
+
 
     # 状态机
     def handle_states(self):
@@ -58,8 +60,6 @@ class Enemy(pygame.sprite.Sprite):
             self.stand()
         if self.state == 'fall':
             self.fall()
-        elif self.state == "move":
-            self.move()
         elif self.state == "follow_player":
             self.follow_player()
 
@@ -67,20 +67,6 @@ class Enemy(pygame.sprite.Sprite):
             self.image = self.right_frames[self.frame_index]
         else:
             self.image = self.left_frames[self.frame_index]
-
-    def update_position(self):
-        self.rect.x += self.x_vel
-        self.rect.y += self.y_vel
-
-    # 行走
-    def walk(self):
-        if self.current_time - self.timer > 100:
-            self.frame_index += 1
-            self.frame_index %= 3
-            self.image = self.frames[self.frame_index]
-            self.timer = self.current_time
-        if self.rect.x == CONS.POSITION_LEFT:
-            self.state = "move"
 
     # 站立
     def stand(self):
@@ -92,16 +78,16 @@ class Enemy(pygame.sprite.Sprite):
         self.y_vel = util.calcu_vel(self.y_vel, CONS.GRAVITY, -CONS.MAX_Y_SPEED)
 
     # 敌人巡逻
-    def move(self):
+    def walk(self):
         if self.current_time - self.timer > 100:
             self.frame_index += 1
             self.frame_index %= 3
             self.image = self.frames[self.frame_index]
             self.timer = self.current_time
-        if self.rect.x <= CONS.POSITION_LEFT:
+        if self.rect.x <= self.walk_left:
             self.face_right = True
             self.x_vel = 1 * CONS.ENEMY_SPEED
-        elif self.rect.x >= CONS.POSITION_RIGHT:
+        elif self.rect.x >= self.walk_right:
             self.face_right = False
             self.x_vel = -1 * CONS.ENEMY_SPEED
 
@@ -117,7 +103,7 @@ class Enemy(pygame.sprite.Sprite):
             self.face_right = False
             self.x_vel = -1 * CONS.ENEMY_SPEED
             if self.rect.x - self.player.rect.x > 200:
-                self.state = "move"
+                self.state = "walk"
         elif self.player.rect.x > self.rect.x:
             if self.current_time - self.timer > 100:
                 self.frame_index += 1
@@ -127,4 +113,4 @@ class Enemy(pygame.sprite.Sprite):
             self.face_right = True
             self.x_vel = 1 * CONS.ENEMY_SPEED
             if self.rect.x - self.player.rect.x < -200:
-                self.state = "move"
+                self.state = "walk"
