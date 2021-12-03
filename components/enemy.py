@@ -35,16 +35,27 @@ class Enemy(pygame.sprite.Sprite):
         self.walk_right = x + 200
 
     def load_images(self):
-        running_frames = ["heroLeft1", "heroLeft2", "heroLeft3"]
+        running_frames = ["Move_1", "Move_2", "Move_3", "Move_4", "Move_5"]
+        attack_frames = ["Attack_1", "Attack_2", "Attack_3", "Attack_4"]
+
         self.right_frames = []
         self.left_frames = []
         for running_frames in running_frames:
-            left_image = setup.enemy_graphics[running_frames]
+            left_image = setup.player_graphics[running_frames]
+            left_image = pygame.transform.scale(left_image, (left_image.get_width() * 0.4, left_image.get_height() * 0.4))
+            right_image = pygame.transform.flip(left_image, True, False)
+            self.right_frames.append(right_image)
+            self.left_frames.append(left_image)
+        for attack_frame in attack_frames:
+            left_image = setup.player_graphics[attack_frame]
+            left_image = pygame.transform.scale(left_image,
+                                                (left_image.get_width() * 0.4, left_image.get_height() * 0.4))
             right_image = pygame.transform.flip(left_image, True, False)
             self.right_frames.append(right_image)
             self.left_frames.append(left_image)
         self.frames = self.left_frames
         self.image = self.frames[self.frame_index]
+        self.rect = self.image.get_rect()
 
     # 更新函数
     def update(self):
@@ -62,6 +73,8 @@ class Enemy(pygame.sprite.Sprite):
             self.fall()
         elif self.state == "follow_player":
             self.follow_player()
+        elif self.state == "attack":
+            self.attack()
 
         if self.face_right:
             self.image = self.right_frames[self.frame_index]
@@ -104,6 +117,8 @@ class Enemy(pygame.sprite.Sprite):
             self.x_vel = -1 * CONS.ENEMY_SPEED
             if self.rect.x - self.player.rect.x > 200:
                 self.state = "walk"
+            if self.rect.x - self.player.rect.x < 100:
+                self.state = "attack"
         elif self.player.rect.x > self.rect.x:
             if self.current_time - self.timer > 100:
                 self.frame_index += 1
@@ -114,3 +129,18 @@ class Enemy(pygame.sprite.Sprite):
             self.x_vel = 1 * CONS.ENEMY_SPEED
             if self.rect.x - self.player.rect.x < -200:
                 self.state = "walk"
+            if self.rect.x - self.player.rect.x > -100:
+                self.state = "attack"
+
+    # 敌人攻击
+    def attack(self):
+        self.frame_index = 6
+        if self.current_time - self.timer > 110:
+            self.frame_index += 1
+            self.state = "follow_player"
+
+
+
+
+
+
