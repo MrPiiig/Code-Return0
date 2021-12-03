@@ -113,7 +113,7 @@ class GameScene:
             self.adjust_x(being, ground_item)
         enemy = pygame.sprite.spritecollideany(self.player, self.enemy_group)
         if enemy:
-            enemy.follow_player()
+            enemy.stand()
 
     # 检测y轴碰撞
     def check_y_collisions(self, being):

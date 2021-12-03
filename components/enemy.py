@@ -83,6 +83,7 @@ class Enemy(pygame.sprite.Sprite):
 
     # 站立
     def stand(self):
+        print("调用stand函数")
         self.x_vel = 0
         self.frame_index = 1
 
