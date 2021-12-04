@@ -112,9 +112,6 @@ class GameScene:
         ground_item = pygame.sprite.spritecollideany(being, self.ground_items_group)
         if ground_item:
             self.adjust_x(being, ground_item)
-        enemy = pygame.sprite.spritecollideany(self.player, self.enemy_group)
-        # if enemy:
-        #     enemy.follow_player()
 
     # 检测y轴碰撞
     def check_y_collisions(self, being):
@@ -130,11 +127,18 @@ class GameScene:
         if self.player.is_attacking:
             if len(attacked_enemy) > 0:
                 for member in attacked_enemy:
-                    if self.player.face_right:
-                        member.x_vel = 10
-                    else:
-                        member.x_vel = -10
-        self.player.is_attacking = False
+                    if member.can_be_hit:
+                        member.state = "hit"
+                        member.hp -= CONS.PLAYER_ATTACK_VALUE
+                        if member.hp > 0:
+                            member.hit_timer = pygame.time.get_ticks()
+                            if self.player.face_right:
+                                member.hit_from_right = False
+                            else:
+                                member.hit_from_right = True
+                        else:
+                            self.enemy_group.remove(member)
+
 
     # 检测到碰撞后重设x位置
     def adjust_x(self, being, item):

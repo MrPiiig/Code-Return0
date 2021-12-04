@@ -18,16 +18,16 @@ class Enemy(pygame.sprite.Sprite):
     walk_right = 0
     def __init__(self, x, y, w, h, player):
         pygame.sprite.Sprite.__init__(self)
+        self.setup_judege()
+        self.setup_timer()
+        self.type = 'enemy'
         self.frame_index = 0
         self.load_images()
         self.rect = pygame.Rect(0, 0, w, h)
         self.rect.x = x
         self.rect.bottom = y
-        self.timer = 0
         self.x_vel = -1 * CONS.ENEMY_SPEED
         self.y_vel = 0
-        self.state = "walk"
-        self.face_right = False
         self.current_time = pygame.time.get_ticks()
         self.player = player
         self.handle_states()
@@ -36,6 +36,20 @@ class Enemy(pygame.sprite.Sprite):
         self.walk_left = x - 200
         self.walk_right = x + 200
 
+
+    # 初始化各类状态判断
+    def setup_judege(self):
+        self.state = "walk"
+        self.face_right = False
+        self.hit_from_right = True
+        self.can_be_hit = True
+
+    # 初始化各类计时器
+    def setup_timer(self):
+        self.timer = 0
+        self.hit_timer = 0
+
+    # 绘制血条
     def draw_hp(self, surface):
         self.hp_percent = self.hp / CONS.ENEMY_HP
         hp_black = setup.enemy_graphics['enemy_hp_black']
@@ -77,10 +91,12 @@ class Enemy(pygame.sprite.Sprite):
     def handle_states(self):
         if self.state == 'walk':
             self.walk()
-        if self.state == 'stand':
+        elif self.state == 'stand':
             self.stand()
-        if self.state == 'fall':
+        elif self.state == 'fall':
             self.fall()
+        elif self.state == 'hit':
+            self.hit()
         elif self.state == "follow_player":
             self.follow_player()
         elif self.state == "attack":
@@ -100,8 +116,11 @@ class Enemy(pygame.sprite.Sprite):
     def fall(self):
         self.y_vel = util.calcu_vel(self.y_vel, CONS.GRAVITY, -CONS.MAX_Y_SPEED)
 
+
     # 敌人巡逻
     def walk(self):
+        if abs(self.player.rect.x - self.rect.x) < 300:
+            self.state = "follow_player"
         if self.current_time - self.timer > 100:
             self.frame_index += 1
             self.frame_index %= 3
@@ -124,7 +143,7 @@ class Enemy(pygame.sprite.Sprite):
                 self.timer = self.current_time
             self.face_right = False
             self.x_vel = -1 * CONS.ENEMY_SPEED
-            if self.rect.x - self.player.rect.x > 200:
+            if self.rect.x - self.player.rect.x > 300:
                 self.state = "walk"
             if self.rect.x - self.player.rect.x < 100:
                 self.state = "attack"
@@ -136,7 +155,7 @@ class Enemy(pygame.sprite.Sprite):
                 self.timer = self.current_time
             self.face_right = True
             self.x_vel = 1 * CONS.ENEMY_SPEED
-            if self.rect.x - self.player.rect.x < -200:
+            if self.rect.x - self.player.rect.x < -300:
                 self.state = "walk"
             if self.rect.x - self.player.rect.x > -100:
                 self.state = "attack"
@@ -149,6 +168,20 @@ class Enemy(pygame.sprite.Sprite):
             self.frame_index += 1
             self.state = "follow_player"
 
+    # 收到攻击
+    def hit(self):
+        self.can_be_hit = False
+        if self.hp <= 0:
+            self.hp = 0
+        if self.hit_from_right:
+            self.x_vel = -2
+        else:
+            self.x_vel = 2
+        if self.current_time - self.hit_timer > 200:
+            self.x_vel = 0
+        if self.current_time - self.hit_timer > 1000:
+            self.can_be_hit = True
+            self.state = "follow_player"
 
 
 

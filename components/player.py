@@ -11,7 +11,6 @@ import util
 class Attack(pygame.sprite.Sprite):
     def __init__(self, x, y, w, h):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((50, 50))
         self.rect = pygame.Rect(x, y, w, h)
 
 
@@ -26,6 +25,7 @@ class Player(pygame.sprite.Sprite):
         self.setup_velocities()
         self.load_images()
         self.setup_attack()
+        self.type = "player"
 
     def setup_attack(self):
         self.right_attack = Attack(self.rect.right, self.rect.top, CONS.PLAYER_ATTACK_WIDTH, CONS.PLAYER_ATTACK_HEIGHT)
@@ -39,8 +39,12 @@ class Player(pygame.sprite.Sprite):
         self.face_right = True
         # 初始帧
         self.frame_index = 1
-        # 攻击判定
+        # 攻击状态判断
         self.is_attacking = False
+        # 能否跳跃判断
+        self.can_jump = True
+        # 能否攻击判断
+        self.can_attack = True
 
     # 各种计时器，以后buff时间，道具使用倒计时
     def setup_timers(self):
@@ -60,7 +64,7 @@ class Player(pygame.sprite.Sprite):
         self.run_accel = CONS.RUN_ACCEL
         self.max_x_vel = self.max_walk_vel
         self.x_accel = self.walk_accel
-        self.can_jump = True
+
 
     # 帧造型，方便表示出运动的变化
     def load_images(self):
@@ -121,6 +125,7 @@ class Player(pygame.sprite.Sprite):
     # 处理各种状态
     def handle_states(self, keys):
         self.judge_jump(keys)
+        self.judge_attack(keys)
         if self.state == 'stand':
             self.stand(keys)
         elif self.state == 'walk':
@@ -156,13 +161,9 @@ class Player(pygame.sprite.Sprite):
 
 
         # 按z键攻击
-        elif keys[pygame.K_z]:
+        elif keys[pygame.K_z] and self.can_attack:
             self.state = 'attack'
             self.attacking_time = self.current_time
-
-
-
-
 
     # 行走
     def walk(self, keys):
@@ -183,7 +184,7 @@ class Player(pygame.sprite.Sprite):
             self.jumping_timer = self.current_time
 
         # 按z键攻击
-        elif keys[pygame.K_z]:
+        elif keys[pygame.K_z] and self.can_attack:
             self.x_vel = 0.4 * self.x_vel
             self.state = 'attack'
             self.attacking_time = self.current_time
@@ -253,6 +254,7 @@ class Player(pygame.sprite.Sprite):
 
     # 攻击
     def attack(self, keys):
+        self.can_attack = False
         self.is_attacking = True
         self.frame_index = 9
         if self.current_time - self.attacking_time > 150:
@@ -265,3 +267,11 @@ class Player(pygame.sprite.Sprite):
             self.frame_index = 9
         if self.current_time - self.attacking_time > 400:
             self.state = 'walk'
+            self.is_attacking = False
+
+    def hit(self, keys):
+        pass
+
+    def judge_attack(self, keys):
+        if not keys[pygame.K_z]:
+            self.can_attack = True
