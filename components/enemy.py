@@ -20,7 +20,7 @@ class Enemy(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.frame_index = 0
         self.load_images()
-        self.rect = self.image.get_rect()
+        self.rect = pygame.Rect(0, 0, w, h)
         self.rect.x = x
         self.rect.bottom = y
         self.timer = 0
@@ -83,7 +83,6 @@ class Enemy(pygame.sprite.Sprite):
 
     # 站立
     def stand(self):
-        print("调用stand函数")
         self.x_vel = 0
         self.frame_index = 1
 
@@ -107,7 +106,6 @@ class Enemy(pygame.sprite.Sprite):
 
     # 敌人追击
     def follow_player(self):
-        self.state = "follow_player"
         if self.player.rect.x < self.rect.x:
             if self.current_time - self.timer > 100:
                 self.frame_index += 1
@@ -135,6 +133,7 @@ class Enemy(pygame.sprite.Sprite):
 
     # 敌人攻击
     def attack(self):
+
         self.frame_index = 6
         if self.current_time - self.timer > 110:
             self.frame_index += 1

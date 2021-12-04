@@ -27,8 +27,8 @@ class Player(pygame.sprite.Sprite):
         self.setup_attack()
 
     def setup_attack(self):
-        self.right_attack = Attack(self.rect.right, self.rect.top, 20, 30)
-        self.left_attack = Attack(self.rect.left, self.rect.top, 20, 30)
+        self.right_attack = Attack(self.rect.right, self.rect.top, CONS.PLAYER_ATTACK_WIDTH, CONS.PLAYER_ATTACK_HEIGHT)
+        self.left_attack = Attack(self.rect.left - CONS.PLAYER_TEXTURE_OFFSET_X, self.rect.top, CONS.PLAYER_ATTACK_WIDTH, CONS.PLAYER_ATTACK_HEIGHT)
 
     # 主角状态
     def setup_state(self):
@@ -63,10 +63,10 @@ class Player(pygame.sprite.Sprite):
 
     # 帧造型，方便表示出运动的变化
     def load_images(self):
-        running_frames = ['Move_1', 'Move_2', 'Move_3', 'Move_4', 'Move_5']
-        jumping_frames = ['Jump_1', 'Jump_2', 'Jump_3']
-
-        left_stand_image = setup.player_graphics['Stand_1']
+        running_frames = ['Move_1', 'Move_2', 'Move_3', 'Move_4', 'Move_5'] # 1~5
+        jumping_frames = ['Jump_1', 'Jump_2', 'Jump_3'] # 6, 7, 8
+        attacking_frams = ['Attack_1', 'Attack_2', 'Attack_3', 'Attack_4'] # 9~12
+        left_stand_image = setup.player_graphics['Stand_1'] # 0
         left_stand_image = pygame.transform.scale(left_stand_image, (left_stand_image.get_width() * 0.4, left_stand_image.get_height() * 0.4))
         right_stand_image = pygame.transform.flip(left_stand_image, True, False)
         self.right_frames = []
@@ -95,10 +95,22 @@ class Player(pygame.sprite.Sprite):
             self.right_frames.append(right_image)
             self.left_frames.append(left_image)
 
+        for attacking_frame in attacking_frams:
+            # 向左跳跃
+            left_image = setup.player_graphics[attacking_frame]
+            left_image = pygame.transform.scale(left_image,
+                                                (left_image.get_width() * 0.4, left_image.get_height() * 0.4))
+            # 向右跳跃
+            right_image = pygame.transform.flip(left_image, True, False)
+            # 添加图片
+            self.right_frames.append(right_image)
+            self.left_frames.append(left_image)
+
 
         self.frames = self.right_frames
         self.image = self.frames[self.frame_index]
-        self.rect = self.image.get_rect()
+        self.rect = pygame.Rect(0, 0, CONS.PLAYER_RECT_WIDTH, CONS.PLAYER_RECT_HEIGHT)
+
 
     def update(self, keys):
         self.current_time = pygame.time.get_ticks()
@@ -169,8 +181,14 @@ class Player(pygame.sprite.Sprite):
             self.state = 'jump'
             self.jumping_timer = self.current_time
 
+        # 按z键攻击
+        elif keys[pygame.K_z]:
+            self.x_vel = 0.4 * self.x_vel
+            self.state = 'attack'
+            self.attacking_time = self.current_time
+
         # 向左移动
-        if keys[pygame.K_RIGHT]:
+        elif keys[pygame.K_RIGHT]:
             self.face_right = True
             # 如果速度小于0，刹车站立帧
             if self.x_vel < 0:
@@ -184,6 +202,8 @@ class Player(pygame.sprite.Sprite):
                 self.frame_index = 1
                 self.x_accel = self.turn_accel
             self.x_vel = util.calcu_vel(self.x_vel, self.x_accel, self.max_x_vel, False)
+
+
 
         # 什么按键都不按，则切换到站立状态
         else:
@@ -221,5 +241,14 @@ class Player(pygame.sprite.Sprite):
     # 攻击
     def attack(self, keys):
         self.is_attacking = True
-        if self.current_time - self.attacking_time > 100:
+        self.frame_index = 9
+        if self.current_time - self.attacking_time > 150:
+            self.frame_index = 10
+        if self.current_time - self.attacking_time > 200:
+            self.frame_index = 11
+        if self.current_time - self.attacking_time > 250:
+            self.frame_index = 12
+        if self.current_time - self.attacking_time > 300:
+            self.frame_index = 9
+        if self.current_time - self.attacking_time > 400:
             self.state = 'walk'

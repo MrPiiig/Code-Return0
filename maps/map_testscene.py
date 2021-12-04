@@ -9,5 +9,5 @@ ground = [
 
 # 敌人参数
 enemy = [
-    {'x': 600, 'y': 400, 'width': 50, 'height': 78},
+    {'x': 600, 'y': 400, 'width': CONS.ENEMY_RECT_WIDTH, 'height': CONS.ENEMY_RECT_HEIGHT},
 ]

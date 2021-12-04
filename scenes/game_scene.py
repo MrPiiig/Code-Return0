@@ -112,8 +112,8 @@ class GameScene:
         if ground_item:
             self.adjust_x(being, ground_item)
         enemy = pygame.sprite.spritecollideany(self.player, self.enemy_group)
-        if enemy:
-            enemy.stand()
+        # if enemy:
+        #     enemy.follow_player()
 
     # 检测y轴碰撞
     def check_y_collisions(self, being):
@@ -129,7 +129,10 @@ class GameScene:
         if self.player.is_attacking:
             if len(attacked_enemy) > 0:
                 for member in attacked_enemy:
-                    member.x_vel = 10
+                    if self.player.face_right:
+                        member.x_vel = 10
+                    else:
+                        member.x_vel = -10
         self.player.is_attacking = False
 
     # 检测到碰撞后重设x位置
@@ -167,9 +170,12 @@ class GameScene:
         self.game_ground.blit(self.background, self.game_window, self.game_window)
         # 人物移动更新画布
         surface.blit(self.background, (0, 0), self.game_window)
-        surface.blit(self.player.image, self.player.rect)
-        # 左右攻击区域判定跟随人物移动
-        # surface.blit(self.player.left_attack.image, self.player.left_attack.rect)
-        # surface.blit(self.player.right_attack.image, self.player.right_attack.rect)
+        pygame.draw.rect(surface, 'red', self.player.rect)
+        pygame.draw.rect(surface, 'blue', self.player.right_attack)
+        pygame.draw.rect(surface, 'blue', self.player.left_attack)
+
+        surface.blit(self.player.image, (self.player.rect.x + CONS.PLAYER_TEXTURE_OFFSET_X, self.player.rect.y + CONS.PLAYER_TEXTURE_OFFSET_Y))
+
         for member in self.enemy_group:
-            surface.blit(member.image, member.rect)
+            pygame.draw.rect(surface, 'red', member.rect)
+            surface.blit(member.image, (member.rect.x + CONS.ENEMY_TEXTURE_OFFSET_X, member.rect.y + CONS.ENEMY_TEXTURE_OFFSET_Y))
