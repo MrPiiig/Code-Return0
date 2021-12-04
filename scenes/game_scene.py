@@ -121,7 +121,7 @@ class GameScene:
         # 检测脚底是否为空
         self.check_falling(being)
 
-    # 检测玩家和敌人的碰撞
+    # 检测玩家的攻击和敌人的碰撞
     def check_player_enemy_collisions(self, being):
         attacked_enemy = pygame.sprite.spritecollide(being, self.enemy_group, False)
         if self.player.is_attacking:

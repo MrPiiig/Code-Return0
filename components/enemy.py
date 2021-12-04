@@ -47,6 +47,7 @@ class Enemy(pygame.sprite.Sprite):
     # 初始化各类计时器
     def setup_timer(self):
         self.timer = 0
+        # 受击计时器，计算受击时间
         self.hit_timer = 0
 
     # 绘制血条

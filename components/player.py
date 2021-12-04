@@ -269,9 +269,11 @@ class Player(pygame.sprite.Sprite):
             self.state = 'walk'
             self.is_attacking = False
 
+    # 受到攻击
     def hit(self, keys):
         pass
 
+    # 判断能否攻击
     def judge_attack(self, keys):
         if not keys[pygame.K_z]:
             self.can_attack = True
