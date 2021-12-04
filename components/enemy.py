@@ -69,7 +69,6 @@ class Enemy(pygame.sprite.Sprite):
 
     # 更新函数
     def update(self):
-        print(self.hp_percent)
         self.current_time = pygame.time.get_ticks()
         self.handle_states()
 

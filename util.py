@@ -38,13 +38,13 @@ class Game:
             self.clock.tick(60)
 
 # 读取图片
-def load_graphics(path):
+def load_graphics(path, accept=('.jpg', '.png')):
     graphics = {}
     for pic in os.listdir(path):
         name, ext = os.path.splitext(pic)
-
-        img = pygame.image.load(os.path.join(path, pic))
-        graphics[name] = img
+        if ext.lower() in accept:
+            img = pygame.image.load(os.path.join(path, pic))
+            graphics[name] = img
 
     return graphics
 

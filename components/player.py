@@ -46,7 +46,7 @@ class Player(pygame.sprite.Sprite):
     def setup_timers(self):
         self.walking_timer = 0
         self.jumping_timer = 0
-        self.attacking_time = 1000
+        self.attacking_time = 0
 
     # 速度数值
     def setup_velocities(self):
@@ -222,7 +222,13 @@ class Player(pygame.sprite.Sprite):
     # 跳跃
     def jump(self, keys):
         self.frame_index = 6
-        if self.current_time - self.jumping_timer > 100:
+        if keys[pygame.K_RIGHT]:
+            self.face_right = True
+            self.x_vel = util.calcu_vel(self.x_vel, self.x_accel, self.max_x_vel, True)
+        elif keys[pygame.K_LEFT]:
+            self.face_right = False
+            self.x_vel = util.calcu_vel(self.x_vel, self.x_accel, self.max_x_vel, False)
+        if self.current_time - self.jumping_timer > 120:
             self.frame_index += 1
         self.can_jump = False
         self.y_vel += CONS.ANTI_GRAVITY
@@ -231,6 +237,12 @@ class Player(pygame.sprite.Sprite):
 
     # 下落
     def fall(self, keys):
+        if keys[pygame.K_RIGHT]:
+            self.face_right = True
+            self.x_vel = util.calcu_vel(self.x_vel, self.x_accel, self.max_x_vel, True)
+        elif keys[pygame.K_LEFT]:
+            self.face_right = False
+            self.x_vel = util.calcu_vel(self.x_vel, self.x_accel, self.max_x_vel, False)
         self.frame_index = 8
         self.y_vel = util.calcu_vel(self.y_vel, CONS.GRAVITY, -CONS.MAX_Y_SPEED)
 
