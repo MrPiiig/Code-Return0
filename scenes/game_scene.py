@@ -42,6 +42,7 @@ class GameScene:
     def setup_cursor(self):
         pass
 
+
     # 设置物品、地形
     def setup_stuff(self):
         self.ground_items_group = pygame.sprite.Group()
@@ -179,3 +180,18 @@ class GameScene:
         for member in self.enemy_group:
             pygame.draw.rect(surface, 'red', member.rect)
             surface.blit(member.image, (member.rect.x + CONS.ENEMY_TEXTURE_OFFSET_X, member.rect.y + CONS.ENEMY_TEXTURE_OFFSET_Y))
+            member.draw_hp(surface)
+
+        self.draw_HUD(surface)
+
+    # 绘制head up display
+    def draw_HUD(self, surface):
+        hp = setup.player_graphics['player_hp_logo']
+        player_hp_black = setup.player_graphics['player_hp_black']
+        player_hp_red = setup.player_graphics['player_hp_red']
+        player_hp_percent = self.player.hp / CONS.PLAYER_HP
+        player_hp_red = pygame.transform.scale(player_hp_red, (player_hp_red.get_width() * player_hp_percent, player_hp_red.get_height()))
+        surface.blit(hp, (50, 80))
+        surface.blit(player_hp_red, (136, 80))
+        surface.blit(player_hp_black, (120, 80))
+

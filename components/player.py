@@ -19,6 +19,7 @@ class Attack(pygame.sprite.Sprite):
 class Player(pygame.sprite.Sprite):
     # 类方法， method
     def __init__(self):
+        self.hp = CONS.PLAYER_HP
         pygame.sprite.Sprite.__init__(self)
         self.setup_state()
         self.setup_timers()

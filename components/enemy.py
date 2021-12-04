@@ -31,8 +31,18 @@ class Enemy(pygame.sprite.Sprite):
         self.current_time = pygame.time.get_ticks()
         self.player = player
         self.handle_states()
+        self.hp = CONS.ENEMY_HP
+        self.hp_percent = self.hp / CONS.ENEMY_HP
         self.walk_left = x - 200
         self.walk_right = x + 200
+
+    def draw_hp(self, surface):
+        self.hp_percent = self.hp / CONS.ENEMY_HP
+        hp_black = setup.enemy_graphics['enemy_hp_black']
+        hp_red = setup.enemy_graphics['enemy_hp_red']
+        hp_red = pygame.transform.scale(hp_red, (hp_red.get_width() * self.hp_percent, hp_red.get_height()))
+        surface.blit(hp_red, (self.rect.x + 18, self.rect.y - 20))
+        surface.blit(hp_black, (self.rect.x + 8, self.rect.y - 20))
 
     def load_images(self):
         running_frames = ["Move_1", "Move_2", "Move_3", "Move_4", "Move_5"]
@@ -59,6 +69,7 @@ class Enemy(pygame.sprite.Sprite):
 
     # 更新函数
     def update(self):
+        print(self.hp_percent)
         self.current_time = pygame.time.get_ticks()
         self.handle_states()
 
