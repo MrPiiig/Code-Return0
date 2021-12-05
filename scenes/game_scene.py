@@ -113,6 +113,7 @@ class GameScene:
         if ground_item:
             self.adjust_x(being, ground_item)
 
+
     # 检测y轴碰撞
     def check_y_collisions(self, being):
         ground_item = pygame.sprite.spritecollideany(being, self.ground_items_group)

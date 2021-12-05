@@ -112,6 +112,7 @@ class Enemy(pygame.sprite.Sprite):
     def stand(self):
         self.x_vel = 0
         self.frame_index = 1
+        
 
     # 坠落
     def fall(self):
@@ -146,7 +147,7 @@ class Enemy(pygame.sprite.Sprite):
             self.x_vel = -1 * CONS.ENEMY_SPEED
             if self.rect.x - self.player.rect.x > 300:
                 self.state = "walk"
-            if self.rect.x - self.player.rect.x < 100:
+            if 100 < self.rect.x - self.player.rect.x < 150:
                 self.state = "attack"
         elif self.player.rect.x > self.rect.x:
             if self.current_time - self.timer > 100:
@@ -158,16 +159,23 @@ class Enemy(pygame.sprite.Sprite):
             self.x_vel = 1 * CONS.ENEMY_SPEED
             if self.rect.x - self.player.rect.x < -300:
                 self.state = "walk"
-            if self.rect.x - self.player.rect.x > -100:
+            if -100 > self.rect.x - self.player.rect.x > -150:
                 self.state = "attack"
 
     # 敌人攻击
     def attack(self):
-
-        self.frame_index = 6
+        self.x_vel = 0
+        self.frame_index = 5
         if self.current_time - self.timer > 110:
-            self.frame_index += 1
-            self.state = "follow_player"
+            if self.current_time - self.timer > 150:
+                self.frame_index = 6
+            if self.current_time - self.timer > 200:
+                self.frame_index = 7
+            if self.current_time - self.timer > 250:
+                self.frame_index = 8
+            if self.current_time - self.timer > 300:
+                self.state = "follow_player"
+
 
     # 收到攻击
     def hit(self):
