@@ -81,9 +81,6 @@ class GameScene:
             elif self.player.face_right == False:
                 self.check_player_enemy_collisions(self.player.left_attack)
         self.player.rect.x += self.player.x_vel
-
-        self.player.right_attack.rect.x = self.player.rect.right
-        self.player.left_attack.rect.x = self.player.rect.left - self.player.rect.width
         if self.player.rect.x < self.start_x:
             self.player.rect.x = self.start_x
         if self.player.rect.x > self.end_x:
@@ -93,8 +90,6 @@ class GameScene:
         self.check_x_collisions(self.player)
 
         self.player.rect.y += self.player.y_vel
-        self.player.right_attack.rect.y = self.player.rect.top
-        self.player.left_attack.rect.y = self.player.rect.top
         # y变化后检测y方向上碰撞
         self.check_y_collisions(self.player)
 
@@ -133,6 +128,7 @@ class GameScene:
                         member.hp -= CONS.PLAYER_ATTACK_VALUE
                         if member.hp > 0:
                             member.hit_timer = pygame.time.get_ticks()
+                            member.y_vel = -3
                             if self.player.face_right:
                                 member.hit_from_right = False
                             else:
@@ -155,8 +151,8 @@ class GameScene:
         if being.rect.bottom < item.rect.bottom:
             being.y_vel = 0
             being.rect.bottom = item.rect.top
-            being.state = 'walk'
-
+            if being.can_be_hit:
+                being.state = 'walk'
         else:
             being.rect.top = item.rect.bottom
             being.state = 'fall'
@@ -165,7 +161,7 @@ class GameScene:
     # 检测脚底是否有碰撞，没有就下落
     def check_falling(self, being):
         being.rect.y += 1
-        if not pygame.sprite.spritecollideany(being, self.ground_items_group) and being.state != 'jump':
+        if not pygame.sprite.spritecollideany(being, self.ground_items_group) and being.state != 'jump' and being.state != 'hit':
             being.state = 'fall'
         else:
             being.rect.y -= 1
@@ -184,6 +180,9 @@ class GameScene:
 
         for member in self.enemy_group:
             pygame.draw.rect(surface, 'red', member.rect)
+            # pygame.draw.rect(surface, 'green', member.right_attack)
+            # pygame.draw.rect(surface, 'green', member.left_attack)
+
             surface.blit(member.image, (member.rect.x + CONS.ENEMY_TEXTURE_OFFSET_X, member.rect.y + CONS.ENEMY_TEXTURE_OFFSET_Y))
             member.draw_hp(surface)
 
