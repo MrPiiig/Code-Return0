@@ -194,7 +194,7 @@ class GameScene:
         player_hp_black = setup.player_graphics['player_hp_black']
         player_hp_red = setup.player_graphics['player_hp_red']
         player_hp_percent = self.player.hp / CONS.PLAYER_HP
-        player_hp_red = pygame.transform.scale(player_hp_red, (player_hp_red.get_width() * player_hp_percent, player_hp_red.get_height()))
+        player_hp_red = pygame.transform.scale(player_hp_red, (int(player_hp_red.get_width() * player_hp_percent), player_hp_red.get_height()))
         surface.blit(hp, (50, 80))
         surface.blit(player_hp_red, (136, 80))
         surface.blit(player_hp_black, (120, 80))

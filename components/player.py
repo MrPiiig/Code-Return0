@@ -79,7 +79,7 @@ class Player(pygame.sprite.Sprite):
         attacking_frams = ['Attack_1', 'Attack_2', 'Attack_3', 'Attack_4'] # 9~12
 
         left_stand_image = setup.player_graphics['Stand_1'] # 0
-        left_stand_image = pygame.transform.scale(left_stand_image, (left_stand_image.get_width() * 0.4, left_stand_image.get_height() * 0.4))
+        left_stand_image = pygame.transform.scale(left_stand_image, (int(left_stand_image.get_width() * 0.4), int(left_stand_image.get_height() * 0.4)))
         right_stand_image = pygame.transform.flip(left_stand_image, True, False)
         self.right_frames.append(right_stand_image)
         self.left_frames.append(left_stand_image)
@@ -87,7 +87,7 @@ class Player(pygame.sprite.Sprite):
         for running_frame in running_frames:
             # 向左移动
             left_image = setup.player_graphics[running_frame]
-            left_image = pygame.transform.scale(left_image, (left_image.get_width() * 0.4, left_image.get_height() * 0.4))
+            left_image = pygame.transform.scale(left_image, (int(left_image.get_width() * 0.4), int(left_image.get_height() * 0.4)))
             # 翻转并向右移动
             right_image = pygame.transform.flip(left_image, True, False)
             # 向右叠加图片
@@ -99,7 +99,7 @@ class Player(pygame.sprite.Sprite):
             # 向左跳跃
             left_image = setup.player_graphics[jumping_frame]
             left_image = pygame.transform.scale(left_image,
-                                                (left_image.get_width() * 0.4, left_image.get_height() * 0.4))
+                                                (int(left_image.get_width() * 0.4), int(left_image.get_height() * 0.4)))
             # 向右跳跃
             right_image = pygame.transform.flip(left_image, True, False)
             # 添加图片
@@ -110,7 +110,7 @@ class Player(pygame.sprite.Sprite):
             # 向左跳跃
             left_image = setup.player_graphics[attacking_frame]
             left_image = pygame.transform.scale(left_image,
-                                                (left_image.get_width() * 0.4, left_image.get_height() * 0.4))
+                                                (int(left_image.get_width() * 0.4), int(left_image.get_height() * 0.4)))
             # 向右跳跃
             right_image = pygame.transform.flip(left_image, True, False)
             # 添加图片
@@ -119,7 +119,7 @@ class Player(pygame.sprite.Sprite):
 
         left_hit_image = setup.player_graphics['Hit_1']  # 13
         left_hit_image = pygame.transform.scale(left_hit_image, (
-        left_hit_image.get_width() * 0.4, left_hit_image.get_height() * 0.4))
+        int(left_hit_image.get_width() * 0.4), int(left_hit_image.get_height() * 0.4)))
         right_hit_image = pygame.transform.flip(left_hit_image, True, False)
         self.right_frames.append(right_hit_image)
         self.left_frames.append(left_hit_image)

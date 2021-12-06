@@ -70,7 +70,7 @@ class Enemy(pygame.sprite.Sprite):
         hp_percent = self.hp / CONS.ENEMY_HP
         hp_black = setup.enemy_graphics['enemy_hp_black']
         hp_red = setup.enemy_graphics['enemy_hp_red']
-        hp_red = pygame.transform.scale(hp_red, (hp_red.get_width() * hp_percent, hp_red.get_height()))
+        hp_red = pygame.transform.scale(hp_red, (int(hp_red.get_width() * hp_percent), int(hp_red.get_height())))
         surface.blit(hp_red, (self.rect.x + 18, self.rect.y - 20))
         surface.blit(hp_black, (self.rect.x + 8, self.rect.y - 20))
 
@@ -82,21 +82,21 @@ class Enemy(pygame.sprite.Sprite):
 
         for running_frames in running_frames:
             left_image = setup.player_graphics[running_frames]
-            left_image = pygame.transform.scale(left_image, (left_image.get_width() * 0.4, left_image.get_height() * 0.4))
+            left_image = pygame.transform.scale(left_image, (int(left_image.get_width() * 0.4), int(left_image.get_height() * 0.4)))
             right_image = pygame.transform.flip(left_image, True, False)
             self.right_frames.append(right_image)
             self.left_frames.append(left_image)
         for attack_frame in attack_frames:
             left_image = setup.player_graphics[attack_frame]
             left_image = pygame.transform.scale(left_image,
-                                                (left_image.get_width() * 0.4, left_image.get_height() * 0.4))
+                                                (int(left_image.get_width() * 0.4), int(left_image.get_height() * 0.4)))
             right_image = pygame.transform.flip(left_image, True, False)
             self.right_frames.append(right_image)
             self.left_frames.append(left_image)
 
         left_hit_image = setup.player_graphics['Hit_1']  # 9
         left_hit_image = pygame.transform.scale(left_hit_image, (
-            left_hit_image.get_width() * 0.4, left_hit_image.get_height() * 0.4))
+            int(left_hit_image.get_width() * 0.4), int(left_hit_image.get_height() * 0.4)))
         right_hit_image = pygame.transform.flip(left_hit_image, True, False)
         self.right_frames.append(right_hit_image)
         self.left_frames.append(left_hit_image)
