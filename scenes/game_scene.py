@@ -5,23 +5,34 @@ import constants as CONS
 from components.enemy import Enemy
 from maps import map_testscene as map
 from components import info
-
+import json
+import os
 
 
 class GameScene:
     def __init__(self):
         self.start_x = 0
         self.end_x = 1200
+        self.load_map_data()
         self.setup_background()
         self.setup_player()
         self.setup_enemies()
         self.setup_cursor()
         self.setup_stuff()
+        self.setup_checkpoint()
         self.finished = False
+
+    # 载入json数据
+    def load_map_data(self):
+        file_name = 'data.json'
+        file_path = os.path.join('components', file_name)
+        with open(file_path) as f:
+            self.map_data = json.load(f)
 
     # 插入背景
     def setup_background(self):
-        self.background = setup.scene_graphics['Background_1.1']
+        self.image_name = self.map_data['image_name']
+        self.background = setup.scene_graphics[self.image_name]
         rect = self.background.get_rect()
         # 将背景设置和游戏界面等高等宽
         self.background = pygame.transform.scale(self.background, (int(rect.width * CONS.BG_MULIT),
@@ -42,7 +53,6 @@ class GameScene:
     def setup_cursor(self):
         pass
 
-
     # 设置物品、地形
     def setup_stuff(self):
         self.ground_items_group = pygame.sprite.Group()
@@ -52,13 +62,29 @@ class GameScene:
     # 设置敌人
     def setup_enemies(self):
         self.enemy_group = pygame.sprite.Group()
-        for member in map.enemy:
-            self.enemy_group.add(enemy.create_enemy(member, self.player))
+        self.enemy_group_dirt = {}
+        for enemy_group_data in self.map_data['enemy']:
+            group = pygame.sprite.Group()
+            for enemy_groupid, enemy_list in enemy_group_data.items():
+                for enemy_data in enemy_list:
+                    group.add(enemy.create_enemy(enemy_data, self.player))
+                self.enemy_group_dirt[enemy_groupid] = group
+
+    # 设置checkpoint
+    def setup_checkpoint(self):
+        self.checkpoint_group = pygame.sprite.Group()
+        for item in self.map_data['checkpoint']:
+            x, y, w, h = item['x'], item['y'], item['width'], item['height']
+            checkpoint_type = item['type']
+            enemy_groupid = item.get('enemy_groupid')
+            self.checkpoint_group.add(stuff.Checkpoint(x, y, w, h, checkpoint_type, enemy_groupid))
 
     # 更新函数，所有需要实时更新的内容
     def update(self, surface, keys):
         self.update_player_state()
         self.player.update(keys)
+        # 检查checkpoint
+        self.check_checkpoints()
         # 更新跟随窗口
         self.update_game_window()
 
@@ -73,6 +99,15 @@ class GameScene:
         if self.player.x_vel > 0 and self.player.rect.centerx > forth:
             self.game_window.x += self.player.x_vel
 
+    # 检查触发checkpoints
+    def check_checkpoints(self):
+        checkpoint = pygame.sprite.spritecollideany(self.player, self.checkpoint_group)
+        if checkpoint:
+            if checkpoint.checkpoint_type == 0:  # 释放敌人
+                print(self.enemy_group_dirt[str(checkpoint.enemy_groupid)])
+                self.enemy_group.add(self.enemy_group_dirt[str(checkpoint.enemy_groupid)])
+            checkpoint.kill()
+
     # 更新玩家位置
     def update_player_state(self):
         if self.player.is_attacking:
@@ -81,10 +116,7 @@ class GameScene:
             elif self.player.face_right == False:
                 self.check_player_enemy_collisions(self.player.left_attack)
         self.player.rect.x += self.player.x_vel
-        if self.player.rect.x < self.start_x:
-            self.player.rect.x = self.start_x
-        if self.player.rect.x > self.end_x:
-            self.player.rect.x = self.end_x
+        
 
         # x变化后检测x方向上碰撞
         self.check_x_collisions(self.player)
@@ -101,13 +133,11 @@ class GameScene:
         enemy.rect.y += enemy.y_vel
         self.check_y_collisions(enemy)
 
-
     # 检测x轴碰撞
     def check_x_collisions(self, being):
         ground_item = pygame.sprite.spritecollideany(being, self.ground_items_group)
         if ground_item:
             self.adjust_x(being, ground_item)
-
 
     # 检测y轴碰撞
     def check_y_collisions(self, being):
@@ -136,7 +166,6 @@ class GameScene:
                         else:
                             self.enemy_group.remove(member)
 
-
     # 检测到碰撞后重设x位置
     def adjust_x(self, being, item):
         if being.rect.x < item.rect.x:
@@ -161,7 +190,8 @@ class GameScene:
     # 检测脚底是否有碰撞，没有就下落
     def check_falling(self, being):
         being.rect.y += 1
-        if not pygame.sprite.spritecollideany(being, self.ground_items_group) and being.state != 'jump' and being.state != 'hit':
+        if not pygame.sprite.spritecollideany(being,
+                                              self.ground_items_group) and being.state != 'jump' and being.state != 'hit':
             being.state = 'fall'
         else:
             being.rect.y -= 1
@@ -176,14 +206,14 @@ class GameScene:
         pygame.draw.rect(surface, 'blue', self.player.right_attack)
         pygame.draw.rect(surface, 'blue', self.player.left_attack)
 
-        surface.blit(self.player.image, (self.player.rect.x + CONS.PLAYER_TEXTURE_OFFSET_X, self.player.rect.y + CONS.PLAYER_TEXTURE_OFFSET_Y))
+        surface.blit(self.player.image, (
+            self.player.rect.x + CONS.PLAYER_TEXTURE_OFFSET_X, self.player.rect.y + CONS.PLAYER_TEXTURE_OFFSET_Y))
 
+        self.enemy_group.draw(self.game_ground)
         for member in self.enemy_group:
             pygame.draw.rect(surface, 'red', member.rect)
-            # pygame.draw.rect(surface, 'green', member.right_attack)
-            # pygame.draw.rect(surface, 'green', member.left_attack)
-
-            surface.blit(member.image, (member.rect.x + CONS.ENEMY_TEXTURE_OFFSET_X, member.rect.y + CONS.ENEMY_TEXTURE_OFFSET_Y))
+            surface.blit(member.image,
+                         (member.rect.x + CONS.ENEMY_TEXTURE_OFFSET_X, member.rect.y + CONS.ENEMY_TEXTURE_OFFSET_Y))
             member.draw_hp(surface)
 
         self.draw_HUD(surface)
@@ -194,8 +224,8 @@ class GameScene:
         player_hp_black = setup.player_graphics['player_hp_black']
         player_hp_red = setup.player_graphics['player_hp_red']
         player_hp_percent = self.player.hp / CONS.PLAYER_HP
-        player_hp_red = pygame.transform.scale(player_hp_red, (int(player_hp_red.get_width() * player_hp_percent), player_hp_red.get_height()))
+        player_hp_red = pygame.transform.scale(player_hp_red, (
+            int(player_hp_red.get_width() * player_hp_percent), player_hp_red.get_height()))
         surface.blit(hp, (50, 80))
         surface.blit(player_hp_red, (136, 80))
         surface.blit(player_hp_black, (120, 80))
-

@@ -1,0 +1,63 @@
+{
+  "image_name":"Background_1.1",
+  "maps":[
+    {"start_x":   0, "end_x": 9086, "player_x": 110, "player_y":538},
+    {"start_x":9090, "end_x": 9890, "player_x":  80, "player_y": 60},
+    {"start_x":6740, "end_x": 9086, "player_x": 270, "player_y":450}
+  ],
+  "ground":[
+    {"x":   0, "y":538, "width":2953, "height":60},
+    {"x":3048, "y":538, "width": 635, "height":60},
+    {"x":3819, "y":538, "width":2735, "height":60},
+    {"x":6647, "y":538, "width":3250, "height":60}
+  ],
+
+  "enemy":[
+    {"0":[
+      {"x":600, "y":400, "width":102, "height":196, "type":0}
+    ]},
+    {"1":[
+      {"x":1920, "y":538, "width":102, "height":196, "type":0}
+    ]},
+    {"2":[
+      {"x":2320, "y":538, "width":102, "height":196, "type":0},
+      {"x":2380, "y":538, "width":102, "height":196, "type":0}
+    ]},
+    {"3":[
+      {"x":3640, "y":193, "width":102, "height":196, "type":0},
+      {"x":3700, "y":193, "width":102, "height":196, "type":0}
+    ]}
+  ],
+  "checkpoint":[
+    {"x": 510, "y":  0, "width":10, "height":600, "type":0, "enemy_groupid":0},
+    {"x":1400, "y":  0, "width":10, "height":600, "type":0, "enemy_groupid":1},
+    {"x":1740, "y":  0, "width":10, "height":600, "type":0, "enemy_groupid":2},
+    {"x":3050, "y":  0, "width":10, "height":600, "type":0, "enemy_groupid":3},
+    {"x":3750, "y":  0, "width":10, "height":600, "type":0, "enemy_groupid":4},
+    {"x":4100, "y":  0, "width":10, "height":600, "type":0, "enemy_groupid":5},
+    {"x":4300, "y":  0, "width":10, "height":600, "type":0, "enemy_groupid":6},
+    {"x":4700, "y":  0, "width":10, "height":600, "type":0, "enemy_groupid":7},
+    {"x":5000, "y":  0, "width":10, "height":600, "type":0, "enemy_groupid":8},
+    {"x":6940, "y":  0, "width":100, "height":600, "type":0, "enemy_groupid":9},
+    {"x":2460, "y":439, "width":50, "height": 10, "type":6, "map_index":1},
+    {"x":8504, "y":-10, "width": 6, "height":600, "type":1},
+    {"x":8780, "y":  0, "width":10, "height":600, "type":2},
+    {"x":2740, "y":360, "width":40, "height": 12, "type":3},
+    {"x":9731, "y":458, "width":10, "height": 70, "type":4},
+    {"x":9800, "y":458, "width":10, "height": 70, "type":5, "map_index":2}
+  ],
+  "flagpole":[
+    {"x":8470, "y":116, "type":0},
+    {"x":8505, "y": 97, "type":1},
+    {"x":8505, "y":137, "type":1},
+    {"x":8505, "y":177, "type":1},
+    {"x":8505, "y":217, "type":1},
+    {"x":8505, "y":257, "type":1},
+    {"x":8505, "y":297, "type":1},
+    {"x":8505, "y":337, "type":1},
+    {"x":8505, "y":377, "type":1},
+    {"x":8505, "y":417, "type":1},
+    {"x":8505, "y":450, "type":1},
+    {"x":8497, "y": 97, "type":2}
+  ]
+}

@@ -6,10 +6,13 @@ from components import player
 from scenes import game_scene
 
 
-# 生成敌人实例
+# 生成敌人实例，player是enemy的对象
 def create_enemy(enemy_data, player):
-    enemy = Enemy(enemy_data['x'], enemy_data['y'], enemy_data['width'], enemy_data['height'], player)
-    return enemy
+    # 增加敌人组，刷新怪物
+    enemy_type = enemy_data['type']
+    if enemy_type == 0:
+        enemy = Enemy(enemy_data['x'], enemy_data['y'], enemy_data['width'], enemy_data['height'], player)
+        return enemy
 
 
 # 敌人基类
