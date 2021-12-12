@@ -1,6 +1,5 @@
 from components import info
 import pygame
-import util
 
 #定义一个加载场景类
 class LoadScene:

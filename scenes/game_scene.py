@@ -2,7 +2,6 @@ import pygame
 import setup
 from components import player, stuff, enemy
 import constants as CONS
-from components.enemy import Enemy
 from components import info
 import json
 import os

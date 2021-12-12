@@ -1,3 +1,21 @@
-The design idea of this project is to design a Chinese martial arts game in the ancient style. The so-called ancient style design is the integration of Chinese classical elements into the design of the scene, the design of the sound effects, the costumes of the characters, and the design of the characters' movements in the game, so that the whole game highlights the characteristics of ancient China. The project team used traditional Chinese art in the style of the game and adopted the ink painting style in the design of the interface theme, the reason this style is that it is softer and more creative in art style, in addition, this style can highlight the characteristics of classical Chinese culture. Secondly, in the design of the logo, the project team has added the design of a seal in the basic ink and wash style. As one of the representations of classical Chinese elements, the seal generally has the role of a footnote or signature, through which the identity of the author is identified. The logo of the project team is designed in this way to echo the ancient Chinese elements.
-The background screen of the game is also presented in the form of an ink scene, the whole screen is like an ink painting printed on a scroll, the purpose of this is to make the game more like an ink painting. Secondly, in the choice of sound effects, the project selected a variety of different styles of Chinese ancient style sound effects, combined with the entire game background, making the process of playing closer to the Chinese martial arts game style.
-The project team used classic Chinese martial arts action elements as the theme for this game, with the main character's appearance and attack style echoing the theme. The game tells the story of a warrior who desires to break his own shackles by defeating his inner demons, so the black-looking enemy is the protagonist's 'demon', whose appearance and attack style is the same as the protagonist. The player can only win the game by killing the enemy at each level. The game has 3 levels, each with different enemy positions and terrain. The player can only move on to the next level after defeating all the enemies in the current level.
+The design idea of this project is to design a Chinese martial arts game in the ancient style. 
+The so-called ancient style design is the integration of Chinese classical elements into the design of the scene, 
+the design of the sound effects, the costumes of the characters, and the design of the characters' movements in the game, 
+so that the whole game highlights the characteristics of ancient China. 
+The project team used traditional Chinese art in the style of the game and adopted the ink painting style in the design of the interface theme, 
+the reason this style is that it is softer and more creative in art style, in addition, 
+this style can highlight the characteristics of classical Chinese culture. 
+Secondly, in the design of the logo, the project team has added the design of a seal in the basic ink and wash style. 
+As one of the representations of classical Chinese elements, the seal generally has the role of a footnote or signature, 
+through which the identity of the author is identified. The logo of the project team is designed in this way to echo the ancient Chinese elements.
+The background screen of the game is also presented in the form of an ink scene, the whole screen is like an ink painting printed on a scroll, 
+the purpose of this is to make the game more like an ink painting. 
+Secondly, in the choice of sound effects, the project selected a variety of different styles of Chinese ancient style sound effects, 
+combined with the entire game background, making the process of playing closer to the Chinese martial arts game style.
+The project team used classic Chinese martial arts action elements as the theme for this game, 
+with the main character's appearance and attack style echoing the theme. 
+The game tells the story of a warrior who desires to break his own shackles by defeating his inner demons, 
+so the black-looking enemy is the protagonist's 'demon', whose appearance and attack style is the same as the protagonist. 
+The player can only win the game by killing the enemy at each level. 
+The game has 3 levels, each with different enemy positions and terrain. 
+The player can only move on to the next level after defeating all the enemies in the current level.

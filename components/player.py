@@ -4,8 +4,6 @@ All actions of the character
 """
 import setup
 import pygame
-# 导入常量数据
-# Importing constant data
 import constants as CONS
 import util
 
@@ -257,18 +255,18 @@ class Player(pygame.sprite.Sprite):
     # Standing
     def stand(self, keys):
         self.frame_index = 0
-        # 方向右键
-        # Directional right button
+        # d键右走
+        # press d to walk right
         if keys[pygame.K_d]:
             self.face_right = True
             self.state = 'walk'
-        # 左键
-        # Directional left button
+        # a键左走
+        # press a to walk left
         elif keys[pygame.K_a]:
             self.face_right = False
             self.state = 'walk'
-        # 按住K键跳跃
-        # Press and hold K to jump
+        # 按K键跳跃
+        # Press K to jump
         elif keys[pygame.K_k] and self.can_jump:
             self.y_vel = CONS.MAX_Y_SPEED
             self.state = 'jump'
@@ -309,8 +307,8 @@ class Player(pygame.sprite.Sprite):
             jump_sound.play()
             self.jumping_timer = self.current_time
 
-        # 按z键攻击
-        # Press z to attack
+        # 按j键攻击
+        # Press j to attack
         elif keys[pygame.K_j] and self.can_attack:
             attack_sound_player = setup.game_sounds['Attack_1']
             attack_sound_player.stop()
@@ -455,5 +453,3 @@ class Player(pygame.sprite.Sprite):
             self.frame_index = 18
         if self.current_time - self.death_timer > 1000:
             self.dead = True
-
-

@@ -1,10 +1,11 @@
-import pygame
-
-import setup
 import util
-
-from scenes import game_scene, load_scene
+from scenes import game_scene
 from scenes import main_scene
+'''
+Reference to code:
+https://github.com/Throde/KT_7
+https://www.bilibili.com/video/BV1G54y197C2
+'''
 
 def main():
     state_dict = {

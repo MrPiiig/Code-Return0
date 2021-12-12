@@ -2,7 +2,7 @@
 import pygame
 import setup
 import constants as CONS
-from components import info,player
+from components import info
 import util
 
 
@@ -85,13 +85,13 @@ class Mainscene:
             int(self.select_arrow_org_size.width * CONS.MAIN_BUTTON_RATE),
             int(self.select_arrow_org_size.height * CONS.MAIN_BUTTON_RATE)))
 
-        # select it to sprite
+        # create a sprite instance
         self.select_arrow = pygame.sprite.Sprite()
         self.select_arrow_image = self.select_arrow_org
 
         rect = self.select_arrow_image.get_rect()
 
-        # location
+        # setup location
         rect.x, rect.y = (650, 100)
         self.select_arrow.rect = rect
         self.select_arrow.state = 0
@@ -131,10 +131,6 @@ class Mainscene:
         surface.blit(self.howtoplay_key, (800, 460))
         surface.blit(util.creat_info('D', size=70), (820, 455))
 
-
-
-
-
       # load picture
         self.start_ui = setup.scene_graphics['mainscene_ui_start']
         # get picture size
@@ -145,9 +141,7 @@ class Mainscene:
             int(self.start_ui_size.height * CONS.MAIN_BUTTON_RATE)))
 
 
-
-
-
+    # judge if keys can be pressed
     def judge_press(self, keys):
         if not keys[pygame.K_a] and not keys[pygame.K_d]:
             self.can_press = True
@@ -185,7 +179,6 @@ class Mainscene:
                     pygame.display.quit()
         elif keys[pygame.K_ESCAPE] and not self.in_menu:
             self.in_menu = True
-
 
     # 更新画布
     # Update the canvas

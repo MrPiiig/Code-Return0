@@ -1,6 +1,4 @@
-import sys
 import pygame
-import random
 import os
 import constants as CONS
 
@@ -10,7 +8,7 @@ class Game:
         self.screen = pygame.display.get_surface()
         self.clock = pygame.time.Clock()
         # 按键
-        # Pushbuttons
+        # get buttons press events
         self.keys = pygame.key.get_pressed()
         self.state_dict = state_dict
         self.state = self.state_dict[start_state]

@@ -3,14 +3,12 @@ import setup
 import util
 import constants as CONS
 from components import player
-from scenes import game_scene
+
 
 
 # 生成敌人实例，player是enemy的对象
-# Generate an enemy instance, player is an object of enemy.
+# Generate an enemy instance, player is the target of enemy.
 def create_enemy(enemy_data, player):
-    # 增加敌人组，刷新怪物
-    # Increase enemy groups and refresh monsters.
     enemy_type = enemy_data['type']
     if enemy_type == 0:
         enemy = Enemy(enemy_data['x'], enemy_data['y'], enemy_data['width'], enemy_data['height'], enemy_data['left'], enemy_data['right'], player)
@@ -103,7 +101,7 @@ class Enemy(pygame.sprite.Sprite):
         dying_frames = ["Enemy_Dead_1", "Enemy_Dead_2", "Enemy_Dead_3", "Enemy_Dead_4"]  # 9~12
 
         # 载入跑步帧
-        # load running frame
+        # load running frames
         for running_frames in running_frames:
             left_image = setup.enemy_graphics[running_frames]
             left_image = pygame.transform.scale(left_image, (int(left_image.get_width() * 0.4), int(left_image.get_height() * 0.4)))
@@ -111,7 +109,7 @@ class Enemy(pygame.sprite.Sprite):
             self.right_frames.append(right_image)
             self.left_frames.append(left_image)
         # 载入攻击帧
-        # load attack frame
+        # load attack frames
         for attack_frame in attack_frames:
             left_image = setup.enemy_graphics[attack_frame]
             left_image = pygame.transform.scale(left_image,
@@ -120,7 +118,7 @@ class Enemy(pygame.sprite.Sprite):
             self.right_frames.append(right_image)
             self.left_frames.append(left_image)
         #载入死亡帧
-        # load dying frame
+        # load dying frames
         for dying_frame in dying_frames:
             left_image = setup.enemy_graphics[dying_frame]
             left_image = pygame.transform.scale(left_image,
@@ -130,7 +128,7 @@ class Enemy(pygame.sprite.Sprite):
             self.left_frames.append(left_image)
 
         #载入受击帧
-        # load attacked frame
+        # load attacked frames
         left_hit_image = setup.enemy_graphics['Enemy_Hit_1']  # 13
         left_hit_image = pygame.transform.scale(left_hit_image, (
             int(left_hit_image.get_width() * 0.4), int(left_hit_image.get_height() * 0.4)))
@@ -328,7 +326,7 @@ class Enemy(pygame.sprite.Sprite):
 
     def go_die(self, enemy_group, enemy_dead_group):
         # 使得enemy状态机进入die状态
-        # Enables the enemy state machine to enter the die state
+        # Enables the enemy state machine to enter 'die' state
         self.x_vel = 0
         self.state = 'die'
         self.death_timer = self.current_time
