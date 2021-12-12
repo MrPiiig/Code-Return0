@@ -143,7 +143,7 @@ class GameScene:
                 self.bg_sound.stop()
                 self.lose_sound.play()
                 self.lose_timer = self.current_time
-            if self.current_time - self.lose_timer > 5000:
+            if self.current_time - self.lose_timer > 1500:
                 for event in pygame.event.get():
                     if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
                         self.lose_sound.stop()
@@ -158,7 +158,7 @@ class GameScene:
                 self.win_sound.play()
                 self.win_timer = self.current_time
             self.draw_win(surface)
-            if self.current_time - self.win_timer > 5000:
+            if self.current_time - self.win_timer > 1500:
                 for event in pygame.event.get():
                     if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
                         self.win_sound.stop()
