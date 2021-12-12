@@ -1,0 +1,36 @@
+{
+  "image_name":"Background_Final_2",
+  "ground":[
+    {"x":   0, "y":622, "width":3060, "height":60},
+    {"x": 550, "y":322, "width":400, "height":20},
+    {"x": 1270, "y":262, "width":400, "height":20}
+  ],
+
+  "platform":[
+    {"x": 550, "y":322, "width":400, "height":20},
+    {"x": 1270, "y":262, "width":400, "height":20}
+  ],
+
+  "enemy":[
+    {"0":[
+      {"x":500, "y":620, "width":102, "height":196, "type":0, "left": 420, "right": 700},
+      {"x":800, "y":320, "width":102, "height":196, "type":0, "left": 620, "right": 850}
+    ]},
+    {"1":[
+      {"x":1350, "y":250, "width":102, "height":196, "type":0, "left": 1300, "right": 1500},
+      {"x":1440, "y":620, "width":102, "height":196, "type":0, "left": 1340, "right": 1640},
+      {"x":1980, "y":320, "width":102, "height":196, "type":0, "left": 1920, "right": 2000}
+    ]},
+    {"2":[
+      {"x":2000, "y":230, "width":102, "height":196, "type":0, "left": 1900, "right": 2100},
+      {"x":2200, "y":260, "width":102, "height":196, "type":0, "left": 2000, "right": 2700},
+      {"x":2600, "y":260, "width":102, "height":196, "type":0, "left": 2300, "right": 2700},
+      {"x":2800, "y":230, "width":102, "height":196, "type":0, "left": 2400, "right": 2800}
+    ]}
+  ],
+  "checkpoint":[
+    {"x": 50, "y":  0, "width":10, "height":600, "type":0, "enemy_groupid":0},
+    {"x":50, "y":  0, "width":10, "height":600, "type":0, "enemy_groupid":1},
+    {"x":2400, "y":  0, "width":10, "height":600, "type":0, "enemy_groupid":2}
+  ]
+  }
