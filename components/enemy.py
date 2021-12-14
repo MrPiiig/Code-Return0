@@ -304,7 +304,10 @@ class Enemy(pygame.sprite.Sprite):
             self.x_vel = 0
         if self.current_time - self.hit_timer > 1000:
             self.can_be_hit = True
-
+            if self.hit_from_right:
+                self.x_vel = 1
+            else:
+                self.x_vel = -1
             self.state = "follow_player"
 
     def die(self):
